@@ -67,7 +67,7 @@ endif()
 
 message(STATUS "Build type is: " ${CMAKE_BUILD_TYPE})
 string(TOUPPER ${CMAKE_BUILD_TYPE} _FLAGS)
-if(NOT "_FLAGS" STREQUAL "NONE")
+if(NOT _FLAGS STREQUAL "NONE")
     set(BUILD_FLAGS "${CMAKE_C_FLAGS_${_FLAGS}}")
 endif()
 message(STATUS "Compiler Flags: " ${BUILD_FLAGS})

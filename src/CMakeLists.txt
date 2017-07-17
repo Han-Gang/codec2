@@ -59,18 +59,20 @@ set(CODEBOOKSGE ${D}/gecb.txt)
 
 # when crosscompiling we need a native executable
 if(CMAKE_CROSSCOMPILING)
-    include(ExternalProject)
-    ExternalProject_Add(codec2_native
-       SOURCE_DIR ${CMAKE_SOURCE_DIR}
-       BUILD_COMMAND $(MAKE) generate_codebook
-       INSTALL_COMMAND ${CMAKE_COMMAND} -E copy src/generate_codebook ${CMAKE_CURRENT_BINARY_DIR}
-    )
-    add_executable(generate_codebook IMPORTED)
-    set_target_properties(generate_codebook PROPERTIES
-        IMPORTED_LOCATION ${CMAKE_CURRENT_BINARY_DIR}/generate_codebook)
-    add_dependencies(generate_codebook codec2_native)
+    # Help the noobs!
+    if (NOT CMAKE_MODULE_PATH)
+        message(
+            FATAL_ERROR 
+            "When cross-compiling, you need to provide an export module 
+            for native codebook generator binaries. See the readme for details."
+            )
+    endif()
+    # Try to import the native codebook generators
+    message("Codec2: Cross-compiling, searching for codebook binaries importer in ${CMAKE_MODULE_PATH}")
+    include(ImportExecutables)
 else(CMAKE_CROSSCOMPILING)
-# Build code generator binaries. These do not get installed.
+    # Build code generator binaries. These do not get installed.
+    message("Codec2: Compiling natively, codebook binaries will be built")
     # generate_codebook
     add_executable(generate_codebook generate_codebook.c)
     target_link_libraries(generate_codebook ${CMAKE_REQUIRED_LIBRARIES})
