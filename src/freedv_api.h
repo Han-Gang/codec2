@@ -34,6 +34,11 @@
 
 #ifndef __FREEDV__
 
+// Need stddef.h when using Clang (size_t)
+#if defined(__clang__)
+#include <stddef.h>
+#endif
+
 // This declares a single-precision (float) complex number
 #include "comp.h"
 
